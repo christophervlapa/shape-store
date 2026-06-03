@@ -1,0 +1,33 @@
+{
+    "shapesData": [
+        {
+            "id": "000",
+            "name": "circle",
+            "image": "circle.png",
+            "description": "The classic circle, useful for obouros.",
+            "price": 5000
+        },
+        {
+            "id": "001",
+            "name": "square",
+            "image": "square.png",
+            "description": "Four sides and no fuss.",
+            "price": 10000
+        },
+        {
+            "id": "002",
+            "name": "triangle",
+            "image": "triangle.png",
+            "description": "Everybody loves this enduring favourite.",
+            "price": 123000
+        },
+        {
+            "id": "004",
+            "name": "pentagon",
+            "image": "pentagon.png",
+            "description": "Five sides of the best.",
+            "price": 600
+        }
+
+]
+}
