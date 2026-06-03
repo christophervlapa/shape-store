@@ -1,9 +1,11 @@
 import { Badge } from "@/components/ui/badge"
 
-import { ShapeCard } from "@/components/shapeCard"
+import { ShapeCard } from "@/components/shapeCard/shapeCard"
 import { useEffect, useState } from "react"
 
 import { type Shape } from "../interfaces/shapes"
+
+import { ShapeStoreContext } from "@/context/shapeStoreContext"
 
 export const Store = () => {
 
@@ -32,14 +34,17 @@ export const Store = () => {
                     <Badge className="bg-red-500 text-white">0</Badge>
                 </div>
             </header>
-            <main className="w-4/5 mx-auto">
-                <h2 className="text-4xl pt-5 pb-3">Shapes For Sale</h2>
-                <div className="shapes-selection flex flex-col sm:flex-row">
-                    { shapesData.map((shapeData: Shape, index: number) => (
-                        <ShapeCard key={`shape-card-${index}`} shapeData={shapeData} />
-                    ))}
-                </div>
-            </main>
+
+            <ShapeStoreContext.Provider value={[]}>
+                <main className="w-4/5 mx-auto">
+                    <h2 className="text-4xl pt-5 pb-3">Shapes For Sale</h2>
+                    <div className="shapes-selection flex flex-col sm:flex-row">
+                        { shapesData.map((shapeData: Shape, index: number) => (
+                            <ShapeCard key={`shape-card-${index}`} shapeData={shapeData} />
+                        ))}
+                    </div>
+                </main>
+            </ShapeStoreContext.Provider>
         </>
     )
 }
