@@ -48,5 +48,3 @@ export const Store = () => {
         </>
     )
 }
-
-// export default Store;
