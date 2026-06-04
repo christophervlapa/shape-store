@@ -82,9 +82,6 @@ const ShapeCardFooter = () => {
             <Button type="button" className="w-full">
             Add To Cart
             </Button>
-            <Button type="button" variant="outline" className="w-full">
-            View { shapeData?.name }
-            </Button>
         </CardFooter>
     )
     
