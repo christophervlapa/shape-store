@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext, useEffect, useState } from "react";
 
 import {
@@ -15,7 +16,7 @@ import { Button } from "@/components/ui/button";
 
 import type { Shape } from "@/interfaces/shapes";
 
-import { CartContext } from "@/context/cartContext";
+import { CartContext } from "@/components/cart/cart";
 
 const ShapeCardContext = createContext<Shape | undefined>(undefined);
 
@@ -26,8 +27,6 @@ interface ShapeCardProps {
 export const ShapeCard = ({ shapeData } : ShapeCardProps) => {
 
     const [ cardData, setCardData ] = useState<Shape | undefined>(undefined);
-
-    const cartContext = useContext(CartContext);
 
     useEffect(() => {
 
@@ -85,15 +84,11 @@ const ShapeCardFooter = () => {
 
     const shapeData = useContext(ShapeCardContext);
 
-    const addTocart = (shapeID: string) => {
-        console.log(`ADD ${shapeID}`);
-        
-        
-    }
+    const { addToCart: addToCartFn } = useContext(CartContext) ?? {};
 
     return (
         <CardFooter className="flex-col gap-2">
-            <Button type="button" className="w-full cursor-pointer" onClick={() => addTocart(shapeData!.id)}>
+            <Button type="button" className="w-full cursor-pointer" onClick={() => { addToCartFn?.(shapeData!) }}>
             Add To Cart
             </Button>
         </CardFooter>

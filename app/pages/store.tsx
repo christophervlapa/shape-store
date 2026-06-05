@@ -2,12 +2,13 @@
 
 import { ShapeCard } from "@/components/shapeCard/shapeCard"
 import { Cart } from "@/components/cart/cart";
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useState, useContext } from "react"
 
 import { type Shape } from "../interfaces/shapes"
 import { StoreLoading } from "../components/loading/storeLoading"
 
-import { ShapeStoreContext } from "@/context/shapeStoreContext"
+import { CartProvider, CartContext } from "@/components/cart/cart"
+
 
 export const Store = () => {
 
@@ -27,7 +28,8 @@ export const Store = () => {
     },[])
 
     return (
-        <>
+        <CartProvider>
+            
             <header className=" flex justify-between items-start sm:items-center border border-b-gray-300 rounded-xl w-4/5 mx-auto mt-2">
                 <div></div>
                 <h1 className="text-6xl p-5 font-bold bg-linear-to-r from-pink-500 via-indigo-600 to-blue-800 bg-clip-text text-transparent">The Shape Store</h1>
@@ -37,20 +39,19 @@ export const Store = () => {
                 </div>
             </header>
 
-            <ShapeStoreContext value={{}}>
-                <main className="w-4/5 mx-auto">
-                    <h2 className="text-4xl pt-5 pb-3">Shapes For Sale</h2>
-                    <div className="shapes-selection flex flex-col sm:flex-row">
-       
-                        { shapesData?.length > 0 ? (shapesData?.map((shapeData: Shape, index: number) => (
-                            <ShapeCard key={`shape-card-${index}`} shapeData={shapeData} />
-                        ))) : (
-                            <StoreLoading />
-                        )}
+            
+            <main className="w-4/5 mx-auto">
+                <h2 className="text-4xl pt-5 pb-3">Shapes For Sale</h2>
+                <div className="shapes-selection flex flex-col sm:flex-row">
+    
+                    { shapesData?.length > 0 ? (shapesData?.map((shapeData: Shape, index: number) => (
+                        <ShapeCard key={`shape-card-${index}`} shapeData={shapeData} />
+                    ))) : (
+                        <StoreLoading />
+                    )}
 
-                    </div>
-                </main>
-            </ShapeStoreContext>
-        </>
+                </div>
+            </main>
+        </CartProvider>
     )
 }
