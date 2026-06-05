@@ -1,9 +1,10 @@
 const http = require('node:http');
+const path = require('node:path');
 const PORT = 3000;
 const allowedOrigins = ['http://localhost:5173'];
 
-
 const fs = require('node:fs');
+const dataPath = path.join(__dirname, 'data.json');
 
 const server = http.createServer((req, res) => {
   console.log(`${req.method} ${req.url}`);
@@ -13,7 +14,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
-  
+
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     res.writeHead(200);
@@ -23,7 +24,7 @@ const server = http.createServer((req, res) => {
 
   // Handle the data endpoint
   if (req.method === 'GET' && req.url === '/api/data') {
-    fs.readFile('./data.json', 'utf8', (err, data) => {
+    fs.readFile(dataPath, 'utf8', (err, data) => {
       if (err) {
         console.error(err);
         res.writeHead(500);
