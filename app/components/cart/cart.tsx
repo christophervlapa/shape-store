@@ -1,3 +1,12 @@
+"use client"
+import { 
+    createContext, 
+    useContext, 
+    useEffect, 
+    useState, 
+    type ReactNode 
+} from "react";
+
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -6,10 +15,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Shape } from "@/interfaces/shapes";
 
-
+// INterfaces used here
 interface CartItem {
     shape: Shape,
     quantity: number
@@ -22,19 +30,26 @@ interface CartContext {
     clearCart: () => void
 }
 
-// @TODO fix this before submitting
+// Create our context for the cart
 export const CartContext = createContext<CartContext | undefined>(undefined);
 
 export const CartProvider = ({ children } : { children: ReactNode}) => {
 
     // is there localstorage? get that stuff, or set to arr nothing
-    const [ cartItems, setCartItems ] = useState<CartItem[]>(
-        // If there is localstorage cartItems, get it
-        typeof window !== "undefined" && localStorage.getItem("cartItems") !== "undefined"
-            ? JSON.parse(localStorage.getItem("cartItems") ?? "[]")
-            : []
-    );
+    const [ cartItems, setCartItems ] = useState<CartItem[]>([]);
 
+    // If there is localstorage cartItems, get it
+    useEffect(() => {
+        const saved = localStorage.getItem("cartItems");
+        if (saved && saved !== "undefined") {
+            setCartItems(JSON.parse(saved));
+        }
+    }, []);
+
+    // Save to localStorage whenever cartItems updates
+    useEffect(() => {
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }, [cartItems]);
 
     // Add shape to cart
     const addToCart = (shape: Shape) => {
@@ -54,15 +69,18 @@ export const CartProvider = ({ children } : { children: ReactNode}) => {
         }
     }
 
+    // Throw out cart
     const clearCart = () => {
         console.log('clear cart ')
         setCartItems([]); // set the cart items to an empty array
     };
 
+    // Get number of items in cart
     const getCartItemsNumber = () => {
         return cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
     }
 
+    // Set up provider
     return (
         <CartContext.Provider value={{
             cartItems,
@@ -78,10 +96,12 @@ export const CartProvider = ({ children } : { children: ReactNode}) => {
 
 export const Cart = () => {
 
+    // Get context vars
     const { getCartItemsNumber, cartItems, clearCart } = useContext(CartContext) ?? {};
     const [shouldPulse, setShouldPulse] = useState(false);
     const cartCount = getCartItemsNumber?.();
 
+    // Nice pulse anim for adding to cart feedback
     useEffect(() => {
         setShouldPulse(true);
         const timeout = setTimeout(() => setShouldPulse(false), 600);
@@ -90,6 +110,7 @@ export const Cart = () => {
 
     return (
         <>
+            {/* ShadCN Popover works with both mobile and desktop, Hovercard is desktop only */}
             <Popover>
                 <PopoverTrigger asChild>
                     <div className="minicart flex justify-center items-center flex-row mr-5 mt-5 sm:mt-0 cursor-pointer">
@@ -100,8 +121,6 @@ export const Cart = () => {
                                 <Badge className={`bg-red-500 text-white w-6 h-6 animate-ping absolute right-0 top-0}`}>{getCartItemsNumber?.()}</Badge>
                             ) : (null)}
                         </div>
-                        
-
                     </div>
                 </PopoverTrigger>
                 <PopoverContent className="flex w-50 flex-col gap-0.5 z-20">

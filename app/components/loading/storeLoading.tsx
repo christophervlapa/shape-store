@@ -9,6 +9,7 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton"
 
+// give users something to let them know we are loading data
 export const StoreLoading = () => {
 
     return (

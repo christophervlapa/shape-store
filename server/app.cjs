@@ -1,5 +1,7 @@
 const http = require('node:http');
 const PORT = 3000;
+const allowedOrigins = ['http://localhost:5173'];
+
 
 const fs = require('node:fs');
 
@@ -7,9 +9,11 @@ const server = http.createServer((req, res) => {
   console.log(`${req.method} ${req.url}`);
 
   // Set CORS headers for all responses
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigins.includes(req.headers.origin) ? req.headers.origin : '');
   res.setHeader('Content-Type', 'application/json');
-
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     res.writeHead(200);

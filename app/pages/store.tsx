@@ -1,25 +1,22 @@
-
+import { useEffect, useState } from "react"
 
 import { ShapeCard } from "@/components/shapeCard/shapeCard"
 import { Cart } from "@/components/cart/cart";
-import { useEffect, useState, useContext } from "react"
+import { type Shape } from "@/interfaces/shapes"
+import { StoreLoading } from "@/components/loading/storeLoading"
+import { CartProvider } from "@/components/cart/cart"
 
-import { type Shape } from "../interfaces/shapes"
-import { StoreLoading } from "../components/loading/storeLoading"
-
-import { CartProvider, CartContext } from "@/components/cart/cart"
-
-
+// Main store component / page
 export const Store = () => {
 
     const [ shapesData, setShapesData ] = useState<Shape[]>([]);
 
     useEffect(() => {
 
+        const apiURL = import.meta.env.VITE_API_URL;
         const loadData = async () => {
-            const response = await fetch('http://localhost:3000/api/data'); 
+            const response = await fetch(apiURL); 
             const data = await response.json();
-            // console.log(data);
             setShapesData(data.shapesData);
         }
 
@@ -38,12 +35,11 @@ export const Store = () => {
                     <Cart />
                 </div>
             </header>
-
             
             <main className="w-4/5 mx-auto">
                 <h2 className="text-4xl pt-5 pb-3">Shapes For Sale</h2>
                 <div className="shapes-selection flex flex-col sm:flex-row">
-    
+
                     { shapesData?.length > 0 ? (shapesData?.map((shapeData: Shape, index: number) => (
                         <ShapeCard key={`shape-card-${index}`} shapeData={shapeData} />
                     ))) : (

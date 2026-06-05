@@ -1,4 +1,4 @@
-"use client";
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 import {
@@ -9,29 +9,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Skeleton } from "@/components/ui/skeleton"
-
 import { Button } from "@/components/ui/button";
 
 import type { Shape } from "@/interfaces/shapes";
-
 import { CartContext } from "@/components/cart/cart";
 
 const ShapeCardContext = createContext<Shape | undefined>(undefined);
-
 interface ShapeCardProps {
     shapeData: Shape;
 }
 
+// Compound component for the shape card, using context for handling props
 export const ShapeCard = ({ shapeData } : ShapeCardProps) => {
 
     const [ cardData, setCardData ] = useState<Shape | undefined>(undefined);
 
     useEffect(() => {
-
         setCardData(shapeData);
-
     },[]);
 
     return (
